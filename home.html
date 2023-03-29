@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>쇼미더무비</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+        * {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+
+        .title {
+            width: 1000px;
+            height: 198px;
+
+            margin: 20px auto 0px auto;
+
+            text-align: center;
+            color: orange;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            background-image: url('https://image.bugsm.co.kr/album/images/1000/205376/20537688.jpg');
+            /* background-position: center; */
+            background-size: cover;
+        }
+
+        .card-box {
+            margin: auto;
+            /* display: flex; */
+            /* align-items: center; */
+            /* justify-content: center; */
+        }
+
+        .card {
+            /* background-color: green; */
+            border: 3px solid grey;
+
+            height: 200px;
+
+            border: 2px grey;
+            margin-top: 50px;
+
+            display: flex;
+            /* flex-direction: row; */
+            align-items: center;
+            /* justify-content: center; */
+        }
+
+        .card>img {
+            border: 5px solid white;
+            margin-left: 230px;
+            width: 150px;
+            height: 150px;
+        }
+
+        .toontitle {
+            border: 3px white;
+            width: 200px;
+            margin-left: 20px;
+
+        }
+
+        .summary {
+            border: 3px white;
+            width: 400px;
+            margin-left: 20px;
+        }
+
+        .viewbutton {
+            width: 130px;
+            height: 60px;
+            margin-left: 40px;
+
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            listing();    //페이지 로딩 되면 listing 함수 실행
+            let rows;
+            console.log(rows)
+        });
+
+        function listing() {
+            fetch('/webtoon').then((res) => res.json()).then((data) => {
+                rows = data['result']
+                $('#cards-box').empty()
+
+                rows.forEach((a) => {
+                    console.log(a)
+                    console.log('aaaaaaaaaa')
+                    let img = a['img']
+                    let title = a['title']
+                    let description = a['desc']
+                    let toonId = a['_id']
+                    fetch('/toonId_get', { method: "POST", body: toonId, }).then((res) => res.json()).then((data) => {
+                    });
+
+
+                    let temp_html = `<div class="card">
+                                        <img src="${img}" /> <!--이미지 -->
+                                        <h5 class="toontitle">>${title}</h5>
+                                        <p class="summary">${description}</p>
+                                        <button class="viewbutton" onclick = 'window.location.href = "/toon?${a['_id']}"'>리뷰보기</button>
+                                    </div>`
+                    $('#cards-box').append(temp_html)     //메인페이지에 리뷰버튼 _id값뒤에 반영                                     
+                })
+            })
+        }
+        function posting() {
+            let id = $('#url').val()
+            
+
+			let formData = new FormData();
+            formData.append("url_give", url);
+            formData.append("comment_give", comment);
+            formData.append("star_give", star);
+
+            fetch('/movie', {method : "POST",body : formData}).then((res) => res.json()).then((data) => {
+            window.location.reload()
+            alert(data['msg'])
+            })
+        }
+
+    </script>
+
+
+</head>
+
+<body>
+    <div class="title" img
+        src="https://newsimg.hankookilbo.com/cms/articlerelease/2020/07/20/bc394b7b-7019-4425-bc46-2677519e9580.jpg">
+        <h1>SHOW ME THE TOON</h1>
+    </div>
+    <div class="card-box " id="cards-box">
+        <div class="card">
+            <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" /> <!--이미지 -->
+            <h5 class="toontitle">여기에 영화제목이 들어갑니다.</h5>
+            <p class="summary">줄거리가 들어갑니다줄거리가 들어갑니다줄거리가 들어갑니다줄거리가 들어갑니다줄거리가 들어갑니다줄거리가 들어갑니다</p>
+            <button class="viewbutton" onclick='window.location.href = "/toon"'>리뷰보기</button>
+        </div>
+    </div>
+
+</body>
+
+</html>
